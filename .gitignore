@@ -1,0 +1,33 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android
+.gradle/
+local.properties
+*.kwks
+*.keystore
+*.jks
+
+# iOS
+Pods/
+.item/
+DerivedData/
+*.moved-aside
+*.xcworkspace
+!default.xcworkspace
+
+# OS generated files
+.DS_Store
+Thumbs.db

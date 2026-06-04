@@ -1,0 +1,4 @@
+#include "Generated.xcconfig"
+OTHER_CFLAGS=$(inherited) -Wno-unused-command-line-argument
+OTHER_LDFLAGS=$(inherited) -Wno-unused-command-line-argument
+

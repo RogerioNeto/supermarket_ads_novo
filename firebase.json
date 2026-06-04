@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "r13note-supermarket-ads",
+          "appId": "1:1014294043694:android:5f4613dd7ea6c9527a93bf",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "r13note-supermarket-ads",
+          "configurations": {
+            "android": "1:1014294043694:android:5f4613dd7ea6c9527a93bf",
+            "ios": "1:1014294043694:ios:8d4e739c37ab4d627a93bf",
+            "macos": "1:1014294043694:ios:7483370f59ce4cfb7a93bf",
+            "web": "1:1014294043694:web:eb58524ca1ee63f77a93bf",
+            "windows": "1:1014294043694:web:6518e51a03b16e037a93bf"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
