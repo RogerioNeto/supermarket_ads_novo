@@ -30,4 +30,9 @@ DerivedData/
 
 # OS generated files
 .DS_Store
-Thumbs.db
+Thumbs.db*.key
+*.p12
+*.cer
+*.csr
+*.pem
+base64_p12.txt
