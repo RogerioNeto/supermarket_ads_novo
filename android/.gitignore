@@ -12,3 +12,11 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Certificados e chaves privadas
+*.key
+*.p12
+*.cer
+*.csr
+*.pem
+base64_p12.txt

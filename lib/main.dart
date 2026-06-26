@@ -61,10 +61,18 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       );
       if (!mounted) return;
 
-      // MELHORIA DE SEGURANÇA:
-      // Em produção, verifique um campo 'isAdmin' no Firestore ou Custom Claims.
-      final isAdmin =
-          _emailController.text.trim().toLowerCase() == "admin@r13note.com";
+      // ✅ CORREÇÃO: pega o uid do usuário autenticado
+      final uid = userCredential.user!.uid;
+
+      // Verifica no Firestore se esse usuário é admin
+      final doc = await FirebaseFirestore.instance
+          .collection('admins')
+          .doc(uid)
+          .get();
+      final isAdmin = doc.exists;
+
+      if (!mounted) return; // Segundo check após o await do Firestore
+
       if (isAdmin) {
         Navigator.pushReplacement(
             context,
@@ -74,14 +82,14 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    SupermarketProApp(storeId: userCredential.user!.uid)));
+                builder: (context) => SupermarketProApp(storeId: uid)));
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Erro de Autenticação: $e")));
     } finally {
-      setState(() => _isLoggingIn = false);
+      if (mounted) setState(() => _isLoggingIn = false);
     }
   }
 
@@ -411,7 +419,6 @@ class _SupermarketProAppState extends State<SupermarketProApp> {
       'jingleIn': _customJingleIn,
       'jingleOut': _customJingleOut,
     });
-    setState(() {});
   }
 
   Future<void> _loadPlaylist() async {
@@ -487,8 +494,8 @@ class _SupermarketProAppState extends State<SupermarketProApp> {
           if (data['ads'] != null) {
             _adsPlaylist = List<Map<String, dynamic>>.from(data['ads']);
           }
-          _customJingleIn = data['jingleIn'];
-          _customJingleOut = data['jingleOut'];
+          _customJingleIn = data['jingleIn'] ?? '';
+          _customJingleOut = data['jingleOut'] ?? '';
 
           if (data['songsBetweenAds'] != null) {
             _songsBetweenAds = data['songsBetweenAds'];
@@ -622,18 +629,19 @@ class _SupermarketProAppState extends State<SupermarketProApp> {
     _stopTimers();
     setState(() {});
 
+    // ✅ Declarada UMA vez, visível em todo o método inclusive no finally
     final auSession = await session.AudioSession.instance;
     try {
-      final auSession = await session.AudioSession.instance;
       if (!await auSession.setActive(true)) return;
       if (type == "text") {
         if (_adsPlaylist.isEmpty) return;
         if (_useJingles) {
-          String path = (_customJingleIn.isNotEmpty)
+          String path = _customJingleIn.isNotEmpty
               ? _customJingleIn
               : 'jingle_in.mp3';
+          // ✅ isAsset: true quando estiver usando o asset padrão (jingle_in.mp3)
           await _playAndWait(path,
-              isAsset: _customJingleIn.isNotEmpty, playbackRate: 0.85);
+              isAsset: _customJingleIn.isEmpty, playbackRate: 0.85);
         }
         for (int i = 0; i < _adsPlaylist.length; i++) {
           await _playItemContent(_adsPlaylist[i]);
@@ -642,12 +650,12 @@ class _SupermarketProAppState extends State<SupermarketProApp> {
           }
         }
         if (_useJingles) {
-          String path =
-              (_customJingleOut.isNotEmpty)
-                  ? _customJingleOut
-                  : 'jingle_out.mp3';
+          String path = _customJingleOut.isNotEmpty
+              ? _customJingleOut
+              : 'jingle_out.mp3';
+          // ✅ isAsset: true quando estiver usando o asset padrão (jingle_out.mp3)
           await _playAndWait(path,
-              isAsset: _customJingleOut == null, playbackRate: 0.85);
+              isAsset: _customJingleOut.isEmpty, playbackRate: 0.85);
         }
       } else {
         if (_musicPlaylist.isEmpty) return;
@@ -660,7 +668,7 @@ class _SupermarketProAppState extends State<SupermarketProApp> {
       await _audioPlayer.stop();
       await _audioPlayer.release();
       await Future.delayed(const Duration(milliseconds: 500));
-      await auSession.setActive(false);
+      await auSession.setActive(false); // ✅ agora enxerga a variável corretamente
 
       setState(() {
         _isSpeaking = false;
@@ -670,7 +678,6 @@ class _SupermarketProAppState extends State<SupermarketProApp> {
       });
     }
   }
-
   // Nova lógica central da rádio
   Future<void> _runRadioLogic() async {
     if (!_isRunning || _isSpeaking) return;
