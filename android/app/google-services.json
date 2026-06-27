@@ -12,7 +12,20 @@
           "package_name": "com.r13.supermarketAds"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1014294043694-658gb0t3oqosg0jev3op1b26000ucddt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.r13.supermarketAds",
+            "certificate_hash": "bfcd58b9a0dababcb469ee59277c5025e3bcdb59"
+          }
+        },
+        {
+          "client_id": "1014294043694-j5vdc48bvtqh90esj92shpp75f5npqs5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAxarpKvSYUvOYh0trnN7OSgj3dD4TO--I"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014294043694-j5vdc48bvtqh90esj92shpp75f5npqs5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1014294043694-a8km0s0lr01h967h674om2shmriguos9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.r13.supermarketAds"
+              }
+            }
+          ]
         }
       }
     }
